@@ -66,7 +66,6 @@ class Positions extends Component implements HasForms, HasTable
                         ->default(1)
                 ])
             ])
-
             ->bulkActions([
                 // ...
             ]);

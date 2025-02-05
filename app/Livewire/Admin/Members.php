@@ -182,11 +182,6 @@ class Members extends Component implements HasForms, HasTable
                         ])
 
                     ])->columns(1)
-
-                    // TextInput::make('number_of_members')
-                    //     ->required()
-                    //     ->numeric()
-                    //     ->default(1)
                 ])
                 ->action(function (array $data) {
 
