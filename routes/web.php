@@ -1,20 +1,23 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use App\Livewire\Admin\Dashboard;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
+use App\Livewire\Admin\Members;
+use App\Livewire\Admin\Officers;
+use App\Livewire\Admin\Positions;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('admin.dashboard');
 });
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+Route::get('/admin/dashboard', Dashboard::class)->middleware(['auth', 'verified'])->name('admin.dashboard');
+Route::get('/admin/positions', Positions::class)->middleware(['auth', 'verified'])->name('admin.positions');
+Route::get('/admin/members', Members::class)->middleware(['auth', 'verified'])->name('admin.members');
+Route::get('/admin/officers', Officers::class)->middleware(['auth', 'verified'])->name('admin.officers');
 
 require __DIR__.'/auth.php';
