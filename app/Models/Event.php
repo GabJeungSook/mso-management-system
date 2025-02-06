@@ -12,4 +12,9 @@ class Event extends Model
     {
         return $this->hasOne(Fee::class);
     }
+
+    public function announcements()
+    {
+        return $this->hasMany(Announcement::class);
+    }
 }

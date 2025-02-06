@@ -3,6 +3,6 @@
         Announcements
     </div>
     <div class="p-4 mt-5">
-        {{-- {{ $this->table }} --}}
+        {{ $this->table }}
     </div>
 </div>
