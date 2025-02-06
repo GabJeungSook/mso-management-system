@@ -31,15 +31,15 @@ class Fees extends Component implements HasForms, HasTable
                 TextColumn::make('event.type')->searchable()->label('EVENT/ACTIVITY/MEETING'),
                 TextColumn::make('event.name')->label('NAME'),
                 TextColumn::make('reg_fee')
-                ->label('Registration Fee')
+                ->label('REGISTRATION FEE')
                 ->formatStateUsing(fn ($state) => '₱' . number_format($state, 2))
                 ->searchable(),
                 TextColumn::make('penalty_fee')
-                ->label('Penalty Fee')
+                ->label('PENALTY FEE')
                 ->formatStateUsing(fn ($state) => '₱' . number_format($state, 2))
                 ->searchable(),
                 TextColumn::make('expenses')
-                ->label('Expenses')
+                ->label('EXPENSES')
                 ->formatStateUsing(fn ($state) => '₱' . number_format($state, 2))
                 ->searchable(),
             ])

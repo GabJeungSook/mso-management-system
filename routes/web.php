@@ -3,6 +3,7 @@
 use App\Livewire\Admin\Dashboard;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Livewire\Admin\Announcements;
 use App\Livewire\Admin\Events;
 use App\Livewire\Admin\Fees;
 use App\Livewire\Admin\Members;
@@ -23,5 +24,6 @@ Route::get('/admin/members', Members::class)->middleware(['auth', 'verified'])->
 Route::get('/admin/officers', Officers::class)->middleware(['auth', 'verified'])->name('admin.officers');
 Route::get('/admin/events', Events::class)->middleware(['auth', 'verified'])->name('admin.events');
 Route::get('/admin/fees', Fees::class)->middleware(['auth', 'verified'])->name('admin.fees');
+Route::get('/admin/announcements', Announcements::class)->middleware(['auth', 'verified'])->name('admin.announcements');
 
 require __DIR__.'/auth.php';
