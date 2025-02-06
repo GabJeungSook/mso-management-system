@@ -49,7 +49,6 @@ class Officers extends Component implements HasForms, HasTable
                 })
                 ->form([
                     Select::make('member_id')
-                    ->required()
                     ->relationship(
                         name: 'member',
                         modifyQueryUsing: fn (Builder $query) => $query->orderBy('first_name')->orderBy('last_name'),
@@ -58,7 +57,6 @@ class Officers extends Component implements HasForms, HasTable
                     ->preload()
                     ->searchable(['first_name', 'last_name']),
                     Select::make('position_id')
-                    ->required()
                     ->relationship(
                         name: 'position',
                         modifyQueryUsing: fn (Builder $query) => $query->whereRaw('

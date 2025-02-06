@@ -1,0 +1,92 @@
+<?php
+
+namespace App\Livewire\Admin;
+
+use App\Models\Fee;
+use Livewire\Component;
+use Filament\Tables\Table;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Contracts\HasTable;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Actions\CreateAction;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Tables\Concerns\InteractsWithTable;
+
+class Fees extends Component implements HasForms, HasTable
+{
+    use InteractsWithTable;
+    use InteractsWithForms;
+
+    public function table(Table $table): Table
+    {
+        return $table
+            ->query(Fee::query())
+            ->columns([
+                TextColumn::make('event.type')->searchable()->label('EVENT/ACTIVITY/MEETING'),
+                TextColumn::make('event.name')->label('NAME'),
+                // TextColumn::make('total_amount')
+                // ->label('Total Amount')
+                // ->formatStateUsing(fn ($state) => '₱' . number_format($state, 2))
+                // ->searchable(),
+            ])
+            ->filters([
+                // ...
+            ])
+            ->actions([
+                // EditAction::make('edit')
+                // ->label('Edit Event')
+                // ->color('success')
+                // ->button()
+                // ->fillForm(function(Model $record) {
+                //     return [
+                //         'type' => $record->type,
+                //         'name' => $record->name,
+                //         'event_date' => $record->event_date,
+                //     ];
+                // })
+                // ->form([
+                //     Select::make('type')
+                //         ->required()
+                //         ->options([
+                //             'Event' => 'Event',
+                //             'Activity' => 'Activity',
+                //             'Meeting' => 'Meeting',
+                //         ]),
+                //     TextInput::make('name')
+                //         ->required(),
+                //     DatePicker::make('event_date')
+                //         ->required()
+                //         ->native(false)
+                //         ->default(Date::now()->format('Y-m-d')),
+                // ]),
+            ])
+            ->headerActions([
+                CreateAction::make('add_fee')
+                ->label('Add New Fee')
+                ->modalHeading('Add New Fee')
+                ->icon('heroicon-o-plus-circle')
+                ->form([
+                    Select::make('event_id')
+                        ->required()
+                        ->relationship('event', 'name'),
+                    // TextInput::make('name')
+                    //     ->required(),
+                    // DatePicker::make('event_date')
+                    //     ->required()
+                    //     ->native(false)
+                    //     ->default(Date::now()->format('Y-m-d')),
+                ])
+            ])
+            ->bulkActions([
+                // ...
+            ]);
+    }
+
+    public function render()
+    {
+        return view('livewire.admin.fees');
+    }
+}
