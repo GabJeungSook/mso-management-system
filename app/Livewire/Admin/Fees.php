@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use App\Models\Fee;
 use Livewire\Component;
 use Filament\Tables\Table;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Actions\EditAction;
@@ -13,6 +14,7 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Get;
 use Filament\Tables\Concerns\InteractsWithTable;
 
 class Fees extends Component implements HasForms, HasTable
@@ -72,8 +74,39 @@ class Fees extends Component implements HasForms, HasTable
                     Select::make('event_id')
                         ->required()
                         ->relationship('event', 'name'),
-                    // TextInput::make('name')
-                    //     ->required(),
+                    Radio::make('has_reg_fee')
+                        ->label('Does this event have a registration fee?')
+                        ->boolean()
+                        ->inline()
+                        ->default(false)
+                        ->live(),
+                    TextInput::make('reg_fee')
+                        ->label('Registration Fee')
+                        ->prefix('₱')
+                        ->numeric()
+                        ->required()->visible(fn (Get $get) => $get('has_reg_fee')),
+                    Radio::make('has_penalty_fee')
+                        ->label('Does this event have a penalty fee?')
+                        ->boolean()
+                        ->inline()
+                        ->default(false)
+                        ->live(),
+                    TextInput::make('penalty_fee')
+                        ->label('Penalty Fee')
+                        ->prefix('₱')
+                        ->numeric()
+                        ->required()->visible(fn (Get $get) => $get('has_penalty_fee')),
+                    Radio::make('has_expenses')
+                        ->label('Does this event have expenses?')
+                        ->boolean()
+                        ->inline()
+                        ->default(false)
+                        ->live(),
+                    TextInput::make('expenses')
+                        ->label('Expenses')
+                        ->prefix('₱')
+                        ->numeric()
+                        ->required()->visible(fn (Get $get) => $get('has_expenses')),
                     // DatePicker::make('event_date')
                     //     ->required()
                     //     ->native(false)
