@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use App\Models\Fee;
 use Livewire\Component;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Contracts\HasForms;
@@ -29,41 +30,76 @@ class Fees extends Component implements HasForms, HasTable
             ->columns([
                 TextColumn::make('event.type')->searchable()->label('EVENT/ACTIVITY/MEETING'),
                 TextColumn::make('event.name')->label('NAME'),
-                // TextColumn::make('total_amount')
-                // ->label('Total Amount')
-                // ->formatStateUsing(fn ($state) => '₱' . number_format($state, 2))
-                // ->searchable(),
+                TextColumn::make('reg_fee')
+                ->label('Registration Fee')
+                ->formatStateUsing(fn ($state) => '₱' . number_format($state, 2))
+                ->searchable(),
+                TextColumn::make('penalty_fee')
+                ->label('Penalty Fee')
+                ->formatStateUsing(fn ($state) => '₱' . number_format($state, 2))
+                ->searchable(),
+                TextColumn::make('expenses')
+                ->label('Expenses')
+                ->formatStateUsing(fn ($state) => '₱' . number_format($state, 2))
+                ->searchable(),
             ])
             ->filters([
                 // ...
             ])
             ->actions([
-                // EditAction::make('edit')
-                // ->label('Edit Event')
-                // ->color('success')
-                // ->button()
-                // ->fillForm(function(Model $record) {
-                //     return [
-                //         'type' => $record->type,
-                //         'name' => $record->name,
-                //         'event_date' => $record->event_date,
-                //     ];
-                // })
-                // ->form([
-                //     Select::make('type')
-                //         ->required()
-                //         ->options([
-                //             'Event' => 'Event',
-                //             'Activity' => 'Activity',
-                //             'Meeting' => 'Meeting',
-                //         ]),
-                //     TextInput::make('name')
-                //         ->required(),
-                //     DatePicker::make('event_date')
-                //         ->required()
-                //         ->native(false)
-                //         ->default(Date::now()->format('Y-m-d')),
-                // ]),
+                EditAction::make('edit')
+                ->label('Edit Fees')
+                ->color('success')
+                ->button()
+                ->fillForm(function(Model $record) {
+                    return [
+                    'event_id' => $record->event_id,
+                    'has_reg_fee' => $record->has_reg_fee,
+                    'reg_fee' => $record->reg_fee,
+                    'has_penalty_fee' => $record->has_penalty_fee,
+                    'penalty_fee' => $record->penalty_fee,
+                    'has_expenses' => $record->has_expenses,
+                    'expenses' => $record->expenses,
+                    ];
+                })
+                ->form([
+                    Select::make('event_id')
+                    ->required()
+                    ->relationship('event', 'name'),
+                Radio::make('has_reg_fee')
+                    ->label('Does this event have a registration fee?')
+                    ->boolean()
+                    ->inline()
+                    ->default(false)
+                    ->live(),
+                TextInput::make('reg_fee')
+                    ->label('Registration Fee')
+                    ->prefix('₱')
+                    ->numeric()
+                    ->required()->visible(fn (Get $get) => $get('has_reg_fee')),
+                Radio::make('has_penalty_fee')
+                    ->label('Does this event have a penalty fee?')
+                    ->boolean()
+                    ->inline()
+                    ->default(false)
+                    ->live(),
+                TextInput::make('penalty_fee')
+                    ->label('Penalty Fee')
+                    ->prefix('₱')
+                    ->numeric()
+                    ->required()->visible(fn (Get $get) => $get('has_penalty_fee')),
+                Radio::make('has_expenses')
+                    ->label('Does this event have expenses?')
+                    ->boolean()
+                    ->inline()
+                    ->default(false)
+                    ->live(),
+                TextInput::make('expenses')
+                    ->label('Expenses')
+                    ->prefix('₱')
+                    ->numeric()
+                    ->required()->visible(fn (Get $get) => $get('has_expenses')),
+                ]),
             ])
             ->headerActions([
                 CreateAction::make('add_fee')
