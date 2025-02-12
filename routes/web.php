@@ -3,6 +3,7 @@
 use App\Livewire\Admin\Dashboard;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Auth;
 use App\Livewire\Admin\Announcements;
 use App\Livewire\Admin\Events;
 use App\Livewire\Admin\Fees;
@@ -11,11 +12,15 @@ use App\Livewire\Admin\Officers;
 use App\Livewire\Admin\Positions;
 
 Route::get('/', function () {
-    return redirect()->route('admin.dashboard');
+    return redirect()->route('login');
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    if (Auth::user()->role === 'admin') {
+        return redirect()->route('admin.positions');
+     } else {
+         return redirect()->route('admin.dashboard');
+     }
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/admin/dashboard', Dashboard::class)->middleware(['auth', 'verified'])->name('admin.dashboard');

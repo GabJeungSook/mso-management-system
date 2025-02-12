@@ -115,7 +115,11 @@ class Officers extends Component implements HasForms, HasTable
                     ->label('Upload Image')
                     ->uploadingMessage('Uploading image...')
                     ->image()
-                    ])
+                    ])->after(function (Model $record) {
+                        $record->member->user->update([
+                            'role' => 'officer',
+                        ]);
+                    }),
             ])
             ->bulkActions([
                 // ...
