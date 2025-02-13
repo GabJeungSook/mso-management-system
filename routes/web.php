@@ -10,6 +10,8 @@ use App\Livewire\Admin\Fees;
 use App\Livewire\Admin\Members;
 use App\Livewire\Admin\Officers;
 use App\Livewire\Admin\Positions;
+use App\Livewire\Member\EventRegistration;
+use App\Livewire\Member\Events as MemberEvents;
 use App\Livewire\Officer\Attendance;
 
 Route::get('/', function () {
@@ -19,8 +21,10 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     if (Auth::user()->role === 'admin') {
         return redirect()->route('admin.positions');
-     } else {
+     } elseif(Auth::user()->role === 'officer') {
          return redirect()->route('admin.members');
+     }else{
+            return redirect()->route('member.events');
      }
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -34,5 +38,8 @@ Route::get('/admin/announcements', Announcements::class)->middleware(['auth', 'v
 
 
 Route::get('/officer/attendance', Attendance::class)->middleware(['auth', 'verified'])->name('officer.attendance');
+
+Route::get('/member/events', MemberEvents::class)->middleware(['auth', 'verified'])->name('member.events');
+Route::get('/member/event-preregistration/{record}', EventRegistration::class)->middleware(['auth', 'verified'])->name('member.event-preregistration');
 
 require __DIR__.'/auth.php';
