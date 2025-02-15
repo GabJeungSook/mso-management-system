@@ -7,6 +7,7 @@ use Filament\Tables\Table;
 use App\Models\Penalty;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Notifications\Notification;
@@ -28,6 +29,10 @@ class Penalties extends Component implements HasForms, HasTable
                 TextColumn::make('event.type')->label('EVENT TYPE'),
                 TextColumn::make('member.fullName')->searchable()->label('MEMBER NAME'),
                 TextColumn::make('amount')->label('AMOUNT'),
+                IconColumn::make('is_paid')
+                ->label('IS PAID')
+                ->boolean()
+
             ])
             ->filters([
                 // ...
