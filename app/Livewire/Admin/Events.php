@@ -3,12 +3,16 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Event;
+use App\Models\Member;
+use App\Models\Fee;
+use App\Models\Penalty;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Livewire\Component;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\EditAction;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Columns\TextColumn;
@@ -34,6 +38,7 @@ class Events extends Component implements HasForms, HasTable
                 TextColumn::make('name')->label('NAME'),
                 TextColumn::make('event_date')->date()->label('EVENT DATE'),
                 ToggleColumn::make('is_active')->label('STATUS')
+                ->disabled(fn (Event $record) => $record->has_ended)
                 ->beforeStateUpdated(function ($record, $state) {
                     $active = Event::where('is_active', true)->exists();
                     if($record->is_active)
@@ -87,7 +92,50 @@ class Events extends Component implements HasForms, HasTable
                         ->required()
                         ->native(false)
                         ->default(Date::now()->format('Y-m-d')),
-                ]),
+                ])
+                ->visible(fn (Event $record) => !$record->has_ended),
+                Action::make('end_event')
+                ->label('End Event')
+                ->color('danger')
+                ->icon('heroicon-o-x-circle')
+                ->requiresConfirmation()
+                ->action(function (Event $record) {
+                    $record->has_ended = true;
+                    $record->is_active = false;
+                    $record->save();
+
+                    
+                  
+                    $fee = Fee::where('event_id', $record->id)->first();
+                    
+                    if($fee != null && $fee->has_penalty_fee === 1)
+                    {
+                        //add penalties
+                        $members = Member::whereDoesntHave('officer')->whereHas('user', function ($query) use ($record){
+                            $event = $record;    
+                            $query->whereDoesntHave('registrations.attendances', function ($subQuery) use ($event) {
+                                $subQuery->where('event_id', $event->id);
+                            });
+                        })->get();
+
+                        foreach($members as $member)
+                        {
+                            Penalty::create([
+                                'event_id' => $record->id,
+                                'member_id' => $member->id,
+                                'amount' => $fee->penalty_fee,
+                            ]);
+                        }
+                    }
+
+                    Notification::make()
+                    ->title('Success')
+                    ->body('Event has successfully ended')
+                    ->success()
+                    ->send();
+                })
+                ->button()
+                ->visible(fn (Event $record) => !$record->has_ended),
             ])
             ->headerActions([
                 CreateAction::make('add_event')

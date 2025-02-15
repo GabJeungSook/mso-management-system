@@ -22,4 +22,9 @@ class Event extends Model
     {
         return $this->hasMany(Registration::class);
     }
+
+    public function penalties()
+    {
+        return $this->hasMany(Penalty::class);
+    }
 }

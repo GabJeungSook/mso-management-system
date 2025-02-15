@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Registration extends Model
+class Penalty extends Model
 {
     protected $guarded = [];
 
@@ -13,13 +13,9 @@ class Registration extends Model
         return $this->belongsTo(Event::class);
     }
 
-    public function user()
+    public function member()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Member::class);
     }
 
-    public function attendances()
-    {
-        return $this->hasMany(Attendance::class);
-    }
 }

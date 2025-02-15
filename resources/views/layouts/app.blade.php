@@ -143,6 +143,31 @@
                                     Announcements
                                 </a>
                             </li>
+                            <li>
+                              <a wire:navigate href="{{ route('admin.scan-qr') }}" class="{{ request()->routeIs('admin.scan-qr') ? 'group flex gap-x-3 rounded-md bg-yellow-700 p-2 text-sm/6 font-semibold text-white' : 'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-50 hover:bg-yellow-700 hover:text-white' }}">
+                                <svg  class="size-6 shrink-0 text-gray-50 group-hover:text-white"xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z" />
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 6.75h.75v.75h-.75v-.75ZM6.75 16.5h.75v.75h-.75v-.75ZM16.5 6.75h.75v.75h-.75v-.75ZM13.5 13.5h.75v.75h-.75v-.75ZM13.5 19.5h.75v.75h-.75v-.75ZM19.5 13.5h.75v.75h-.75v-.75ZM19.5 19.5h.75v.75h-.75v-.75ZM16.5 16.5h.75v.75h-.75v-.75Z" />
+                                </svg>
+                                  Scan QR Code
+                              </a>
+                          </li>
+                          <li>
+                            <a wire:navigate href="{{ route('officer.attendance') }}" class="{{ request()->routeIs('officer.attendance') ? 'group flex gap-x-3 rounded-md bg-yellow-700 p-2 text-sm/6 font-semibold text-white' : 'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-50 hover:bg-yellow-700 hover:text-white' }}">
+                              <svg class="size-6 shrink-0 text-gray-50 group-hover:text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0 1 18 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3 1.5 1.5 3-3.75" />
+                              </svg>
+                                Attendance
+                            </a>
+                        </li>
+                        <li>
+                          <a wire:navigate href="{{ route('admin.penalties') }}" class="{{ request()->routeIs('admin.penalties') ? 'group flex gap-x-3 rounded-md bg-yellow-700 p-2 text-sm/6 font-semibold text-white' : 'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-50 hover:bg-yellow-700 hover:text-white' }}">
+                            <svg class="size-6 shrink-0 text-gray-50 group-hover:text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+                            </svg>
+                              Penalties
+                          </a>
+                        </li>
                         </ul>
                       </li>
                   </ul>
@@ -347,6 +372,14 @@
                                     Announcements
                                 </a>
                             </li>
+                            <li>
+                              <a wire:navigate href="{{ route('member.penalties') }}" class="{{ request()->routeIs('member.penalties') ? 'group flex gap-x-3 rounded-md bg-yellow-700 p-2 text-sm/6 font-semibold text-white' : 'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-50 hover:bg-yellow-700 hover:text-white' }}">
+                                <svg class="size-6 shrink-0 text-gray-50 group-hover:text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+                                </svg>
+                                  My Penalties
+                              </a>
+                            </li>
                         </ul>
                       </li>
                   </ul>
@@ -482,6 +515,22 @@
                                 Scan QR Code
                             </a>
                         </li>
+                        <li>
+                          <a wire:navigate href="{{ route('officer.attendance') }}" class="{{ request()->routeIs('officer.attendance') ? 'group flex gap-x-3 rounded-md bg-yellow-700 p-2 text-sm/6 font-semibold text-white' : 'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-50 hover:bg-yellow-700 hover:text-white' }}">
+                            <svg class="size-6 shrink-0 text-gray-50 group-hover:text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0 1 18 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3 1.5 1.5 3-3.75" />
+                            </svg>
+                              Attendance
+                          </a>
+                      </li>
+                      <li>
+                        <a wire:navigate href="{{ route('admin.penalties') }}" class="{{ request()->routeIs('admin.penalties') ? 'group flex gap-x-3 rounded-md bg-yellow-700 p-2 text-sm/6 font-semibold text-white' : 'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-50 hover:bg-yellow-700 hover:text-white' }}">
+                          <svg class="size-6 shrink-0 text-gray-50 group-hover:text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+                          </svg>
+                            Penalties
+                        </a>
+                      </li>
                     </ul>
                   </li>
               </ul>
@@ -685,6 +734,14 @@
                               </svg>
                                 Announcements
                             </a>
+                        </li>
+                        <li>
+                          <a wire:navigate href="{{ route('member.penalties') }}" class="{{ request()->routeIs('member.penalties') ? 'group flex gap-x-3 rounded-md bg-yellow-700 p-2 text-sm/6 font-semibold text-white' : 'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-50 hover:bg-yellow-700 hover:text-white' }}">
+                            <svg class="size-6 shrink-0 text-gray-50 group-hover:text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+                            </svg>
+                              My Penalties
+                          </a>
                         </li>
                     </ul>
                   </li>
