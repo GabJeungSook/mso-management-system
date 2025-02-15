@@ -23,8 +23,10 @@ class PenaltyReport extends Component
         {
             
         $this->penalties = Penalty::where('event_id', $this->event->id)->where('is_paid', 1)->get();
-        $this->total = $this->penalties->sum('amount');
+        }else{
+            $this->penalties = Penalty::where('is_paid', 1)->get();
         }
+    $this->total = $this->penalties->sum('amount');
             
     }
 
