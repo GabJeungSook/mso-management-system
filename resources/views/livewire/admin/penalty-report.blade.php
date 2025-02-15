@@ -1,5 +1,5 @@
 <div>
-    @if(!$event)
+    @if(!$event || !$penalties)
     <div class="flex justify-end m-10">
         <button onclick="window.print()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
             Print
