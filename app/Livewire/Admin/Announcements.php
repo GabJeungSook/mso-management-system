@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use Livewire\Component;
 use Filament\Tables\Table;
 use App\Models\Announcement;
+use App\Models\Member;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Actions\EditAction;
@@ -12,9 +13,10 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
-
+use App\Services\TeamSSProgramSmsService;
 use Filament\Forms\Components\RichEditor;
 use Filament\Tables\Actions\CreateAction;
+use Filament\Notifications\Notification;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 
@@ -86,6 +88,50 @@ class Announcements extends Component implements HasForms, HasTable
                             'undo',
                         ])
                 ])
+                ->after(function (array $data) {
+                    $smsService = new TeamSSProgramSmsService();
+                    $message = strip_tags($data['content']);
+
+                    $members = Member::whereDoesntHave('officer')->get();
+
+                    if ($members->isEmpty()) {
+                        Notification::make()
+                            ->title('No Recipients')
+                            ->danger()
+                            ->body('No members found')
+                            ->send();
+                        return;
+                    }
+
+                    $phoneNumbers = $members->map(function ($user) {
+                        return $user->phone_number;
+                    })->filter()->toArray();
+
+                    if (empty($phoneNumbers)) {
+                        Notification::make()
+                            ->title('No Recipients')
+                            ->danger()
+                            ->body('No valid phone numbers found in the members.')
+                            ->send();
+                        return;
+                    }
+
+                    $response = $smsService->sendBulkSms($phoneNumbers, $message);
+
+                    if (isset($response['error']) && $response['error']) {
+                        Notification::make()
+                            ->title('SMS Failed')
+                            ->danger()
+                            ->body('Failed to send SMS: ' . $response['message'])
+                            ->send();
+                    } else {
+                        Notification::make()
+                            ->title('Success')
+                            ->success()
+                            ->body('Announcement was sent to users')
+                            ->send();
+                    }
+                })
             ])
             ->bulkActions([
                 // ...

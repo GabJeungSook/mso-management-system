@@ -8,6 +8,7 @@ use App\Livewire\Admin\Announcements;
 use App\Livewire\Admin\Events;
 use App\Livewire\Admin\Fees;
 use App\Livewire\Admin\Members;
+use App\Livewire\Admin\PenaltyReport;
 use App\Livewire\Admin\Officers;
 use App\Livewire\Admin\Positions;
 use App\Livewire\Admin\Penalties;
@@ -45,6 +46,7 @@ Route::get('/admin/scan-qr', ScanQrCode::class)->middleware(['auth', 'verified']
 Route::get('/admin/pre-registered-members', PreRegisteredMembers::class)->middleware(['auth', 'verified'])->name('admin.pre-registered-members');
 Route::get('/admin/attendance', Attendance::class)->middleware(['auth', 'verified'])->name('officer.attendance');
 Route::get('/admin/penalties', Penalties::class)->middleware(['auth', 'verified'])->name('admin.penalties');
+Route::get('/admin/reports/penalties', PenaltyReport::class)->middleware(['auth', 'verified'])->name('admin.report-penalties');
 
 
 

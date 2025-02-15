@@ -175,6 +175,12 @@
                 <li>
                   <div class="text-xs/6 font-semibold text-gray-50">Reports</div>
                   <ul role="list" class="-mx-2 mt-2 space-y-1">
+                    <li>
+                      <a wire:navigate href="{{ route('admin.report-penalties') }}" class="{{ request()->routeIs('admin.report-penalties') ? 'group flex gap-x-3 rounded-md bg-yellow-700 p-2 text-sm/6 font-semibold text-white' : 'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-50 hover:bg-yellow-700 hover:text-white' }}">
+                        <span class="flex size-6 shrink-0 items-center justify-center rounded-lg border border-yellow-400 bg-yellow-500 text-[0.625rem] font-medium text-white">P</span>
+                        <span class="truncate">Penalty Report</span>
+                      </a>
+                    </li>
                     {{-- <li>
                       <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-indigo-200 hover:bg-indigo-700 hover:text-white">
                         <span class="flex size-6 shrink-0 items-center justify-center rounded-lg border border-indigo-400 bg-indigo-500 text-[0.625rem] font-medium text-white">H</span>
@@ -538,13 +544,13 @@
             <li>
               <div class="text-xs/6 font-semibold text-gray-50">Reports</div>
               <ul role="list" class="-mx-2 mt-2 space-y-1">
-                {{-- <li>
-                  <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-indigo-200 hover:bg-indigo-700 hover:text-white">
-                    <span class="flex size-6 shrink-0 items-center justify-center rounded-lg border border-indigo-400 bg-indigo-500 text-[0.625rem] font-medium text-white">H</span>
-                    <span class="truncate">Heroicons</span>
+                <li>
+                  <a wire:navigate href="{{ route('admin.report-penalties') }}" class="{{ request()->routeIs('admin.report-penalties') ? 'group flex gap-x-3 rounded-md bg-yellow-700 p-2 text-sm/6 font-semibold text-white' : 'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-50 hover:bg-yellow-700 hover:text-white' }}">
+                    <span class="flex size-6 shrink-0 items-center justify-center rounded-lg border border-yellow-400 bg-yellow-500 text-[0.625rem] font-medium text-white">P</span>
+                    <span class="truncate">Penalty Report</span>
                   </a>
                 </li>
-                <li>
+                {{-- <li>
                   <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-indigo-200 hover:bg-indigo-700 hover:text-white">
                     <span class="flex size-6 shrink-0 items-center justify-center rounded-lg border border-indigo-400 bg-indigo-500 text-[0.625rem] font-medium text-white">T</span>
                     <span class="truncate">Tailwind Labs</span>
