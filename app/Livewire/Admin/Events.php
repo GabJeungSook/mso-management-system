@@ -126,9 +126,9 @@ class Events extends Component implements HasForms, HasTable
                                 'amount' => $fee->penalty_fee,
                             ]);
                         }
-
+                        $fee = Fee::where('event_id', $record->id)->first();
                         $smsService = new TeamSSProgramSmsService();
-                        $message = 'MSO MANAGEMENT SYSTEM SMS\nPenalty\nYou have not attended the event '.$record->name.'\nYou have to pay the amount of: '.$fee->amount;
+                        $message = 'MSO MANAGEMENT SYSTEM SMS\nPenalty\nYou have not attended the event '.$record->name.'\nYou have to pay an amount of: '.$fee->amount;
 
                         if ($members->isEmpty()) {
                             Notification::make()
