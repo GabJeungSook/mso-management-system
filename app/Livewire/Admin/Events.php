@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\EditAction;
+use App\Services\TeamSSProgramSmsService;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -103,7 +104,6 @@ class Events extends Component implements HasForms, HasTable
                     $record->has_ended = true;
                     $record->is_active = false;
                     $record->save();
-
                     
                   
                     $fee = Fee::where('event_id', $record->id)->first();
@@ -125,6 +125,47 @@ class Events extends Component implements HasForms, HasTable
                                 'member_id' => $member->id,
                                 'amount' => $fee->penalty_fee,
                             ]);
+                        }
+
+                        $smsService = new TeamSSProgramSmsService();
+                        $message = 'MSO MANAGEMENT SYSTEM SMS\nPenalty\nYou have not attended the event '.$record->name.'\nYou have to pay the amount of: '.$fee->amount;
+
+                        if ($members->isEmpty()) {
+                            Notification::make()
+                                ->title('No Recipients')
+                                ->danger()
+                                ->body('No members found')
+                                ->send();
+                            return;
+                        }
+
+                        $phoneNumbers = $members->map(function ($user) {
+                            return $user->phone_number;
+                        })->filter()->toArray();
+
+                        if (empty($phoneNumbers)) {
+                            Notification::make()
+                                ->title('No Recipients')
+                                ->danger()
+                                ->body('No valid phone numbers found in the members.')
+                                ->send();
+                            return;
+                        }
+    
+                        $response = $smsService->sendBulkSms($phoneNumbers, $message);
+    
+                        if (isset($response['error']) && $response['error']) {
+                            Notification::make()
+                                ->title('SMS Failed')
+                                ->danger()
+                                ->body('Failed to send SMS: ' . $response['message'])
+                                ->send();
+                        } else {
+                            Notification::make()
+                                ->title('Success')
+                                ->success()
+                                ->body('Penalty message was sent to absent members.')
+                                ->send();
                         }
                     }
 

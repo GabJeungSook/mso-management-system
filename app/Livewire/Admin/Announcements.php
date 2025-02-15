@@ -90,7 +90,8 @@ class Announcements extends Component implements HasForms, HasTable
                 ])
                 ->after(function (array $data) {
                     $smsService = new TeamSSProgramSmsService();
-                    $message = strip_tags($data['content']);
+                    $content = strip_tags($data['content']);
+                    $message = 'MSO MANAGEMENT SYSTEM SMS\nAnnouncement\n'.$content;
 
                     $members = Member::whereDoesntHave('officer')->get();
 

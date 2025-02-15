@@ -8,6 +8,7 @@ use App\Models\Penalty;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\IconColumn;
+use App\Services\TeamSSProgramSmsService;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Notifications\Notification;
@@ -46,6 +47,35 @@ class Penalties extends Component implements HasForms, HasTable
                 ->action(function (Penalty $record) {
                     $record->is_paid = 1;
                     $record->save();
+
+                    $smsService = new TeamSSProgramSmsService();
+                    $number = $record->member->phone_number;
+                    $message = 'MSO MANAGEMENT SYSTEM SMS\nPenalty Payment\nYou have paid your penalty for the event '.$record->event->name.' with the amount of '.$record->amount;
+
+                    if (!$number) {
+                        Notification::make()
+                            ->title('SMS Failed')
+                            ->danger()
+                            ->body('The phone number is missing or invalid.')
+                            ->send();
+
+                        return;
+                    }
+
+                    $response = $smsService->sendSms($number, $message);
+                    if (isset($response['error']) && $response['error']) {
+                        Notification::make()
+                            ->title('SMS Failed')
+                            ->danger()
+                            ->body('Failed to send SMS: ' . $response['message'])
+                            ->send();
+                    } else {
+                        Notification::make()
+                            ->title('SMS Sent')
+                            ->success()
+                            ->body('SMS sent successfully to member')
+                            ->send();
+                    }
 
                     Notification::make()
                     ->success()
