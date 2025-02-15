@@ -176,7 +176,7 @@ class Events extends Component implements HasForms, HasTable
                     ->send();
                 })
                 ->button()
-                ->visible(fn (Event $record) => !$record->has_ended || $record->is_active),
+                ->visible(fn (Event $record) => !$record->has_ended && $record->is_active),
             ])
             ->headerActions([
                 CreateAction::make('add_event')
