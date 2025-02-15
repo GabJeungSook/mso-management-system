@@ -1,5 +1,4 @@
 <div>
-    @if(!$event || !$penalties)
     <div class="flex justify-end m-10">
         <button onclick="window.print()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
             Print
@@ -49,7 +48,4 @@
             <span class="underline mr-5 py-5 font-semibold text-3xl">Total: ₱ {{number_format($total, 2)}}</span>
         </div>
     </div>
-    @else
-    no event
-    @endif
 </div>
