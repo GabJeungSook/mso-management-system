@@ -10,6 +10,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\EditAction;
 use Illuminate\Database\Eloquent\Builder;
@@ -77,6 +78,11 @@ class Officers extends Component implements HasForms, HasTable
                     ->uploadingMessage('Uploading image...')
                     ->image()
                 ]),
+                Action::make('unassign')
+                ->requiresConfirmation()
+                ->button()
+                ->color('danger')
+                ->action(fn (Officer $record) => $record->delete())
             ])
             ->headerActions([
                 CreateAction::make('add_officer')

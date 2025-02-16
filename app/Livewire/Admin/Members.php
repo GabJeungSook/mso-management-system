@@ -9,6 +9,7 @@ use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Tables\Actions\CreateAction;
+use Filament\Actions\DeleteAction;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -41,6 +42,8 @@ class Members extends Component implements HasForms, HasTable
                 TextColumn::make('address')->wrap()->label('ADDRESS'),
                 TextColumn::make('phone_number')->label('PHONE NUMBER'),
                 TextColumn::make('birth_date')->date()->label('BIRTH DATE'),
+                TextColumn::make('course')->label('COURSE'),
+                TextColumn::make('year')->label('YEAR'),
             ])
             ->filters([
                 // ...
@@ -58,6 +61,8 @@ class Members extends Component implements HasForms, HasTable
                         'address' => $record->address,
                         'phone_number' => $record->phone_number,
                         'birth_date' => $record->birth_date,
+                        'course' => $record->course,
+                        'year' => $record->year,
                     ];
                 })
                 ->form([
@@ -76,6 +81,12 @@ class Members extends Component implements HasForms, HasTable
                     Textarea::make('address')
                         ->required(),
                     TextInput::make('phone_number')
+                        ->required()
+                        ->maxLength(255),
+                        TextInput::make('course')
+                        ->required()
+                        ->maxLength(255),
+                        TextInput::make('year')
                         ->required()
                         ->maxLength(255),
                     DatePicker::make('birth_date')
@@ -122,6 +133,19 @@ class Members extends Component implements HasForms, HasTable
                     ->title('Success')
                     ->body('Member account updated successfully')
                     ->send();
+                }),
+                Action::make('delete')
+                ->requiresConfirmation()
+                ->button()
+                ->color('danger')
+                ->action(fn (Member $record) => $record->delete())
+                ->visible(function (Member $record) {
+                    if($record->officer()->exists() || $record->registrations()->exists() || $record->penalties()->exists())
+                    {
+                        return false;
+                    }else{
+                        return true;
+                    }
                 })
             ])
             ->headerActions([
@@ -150,6 +174,12 @@ class Members extends Component implements HasForms, HasTable
                                 'female' => 'Female'
                             ]),
                             TextInput::make('phone_number')
+                            ->required()
+                            ->maxLength(255),
+                            TextInput::make('course')
+                            ->required()
+                            ->maxLength(255),
+                            TextInput::make('year')
                             ->required()
                             ->maxLength(255),
                         ]),
@@ -200,6 +230,8 @@ class Members extends Component implements HasForms, HasTable
                         'address' => $data['address'],
                         'phone_number' => $data['phone_number'],
                         'birth_date' => $data['birth_date'],
+                        'course' => $data['course'],
+                        'year' => $data['year'],
                     ]);
 
                     Notification::make()

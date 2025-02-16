@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('type');
             $table->text('name');
             $table->date('event_date');
+            $table->time('event_time');
             $table->boolean('is_active')->default(false);
             $table->timestamps();
         });

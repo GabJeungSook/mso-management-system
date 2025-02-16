@@ -20,6 +20,8 @@ return new class extends Migration
             $table->text('address');
             $table->string('phone_number');
             $table->date('birth_date');
+            $table->string('course');
+            $table->string('year');
             $table->timestamps();
         });
     }

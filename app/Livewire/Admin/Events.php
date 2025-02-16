@@ -7,6 +7,7 @@ use App\Models\Member;
 use App\Models\Fee;
 use App\Models\Penalty;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\TimePicker;
 use Filament\Forms\Components\Select;
 use Livewire\Component;
 use Filament\Tables\Table;
@@ -38,6 +39,7 @@ class Events extends Component implements HasForms, HasTable
                 TextColumn::make('type')->searchable()->label('TYPE'),
                 TextColumn::make('name')->label('NAME'),
                 TextColumn::make('event_date')->date()->label('EVENT DATE'),
+                TextColumn::make('event_time')->time()->label('EVENT TIME'),
                 ToggleColumn::make('is_active')->label('STATUS')
                 ->disabled(fn (Event $record) => $record->has_ended)
                 ->beforeStateUpdated(function ($record, $state) {
@@ -77,6 +79,7 @@ class Events extends Component implements HasForms, HasTable
                         'type' => $record->type,
                         'name' => $record->name,
                         'event_date' => $record->event_date,
+                        'event_time' => $record->event_time,
                     ];
                 })
                 ->form([
@@ -93,6 +96,7 @@ class Events extends Component implements HasForms, HasTable
                         ->required()
                         ->native(false)
                         ->default(Date::now()->format('Y-m-d')),
+                    TimePicker::make('event_time')
                 ])
                 ->visible(fn (Event $record) => !$record->has_ended),
                 Action::make('end_event')
@@ -197,6 +201,8 @@ class Events extends Component implements HasForms, HasTable
                         ->required()
                         ->native(false)
                         ->default(Date::now()->format('Y-m-d')),
+                    TimePicker::make('event_time')
+                    ->seconds(false)
                 ])
             ])
             ->bulkActions([

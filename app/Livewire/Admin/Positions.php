@@ -7,6 +7,7 @@ use App\Models\Position;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -50,6 +51,19 @@ class Positions extends Component implements HasForms, HasTable
                         ->required()
                         ->numeric()
                 ]),
+                Action::make('delete')
+                ->requiresConfirmation()
+                ->button()
+                ->color('danger')
+                ->action(fn (Position $record) => $record->delete())
+                ->visible(function (Position $record) {
+                    if($record->officer()->exists())
+                    {
+                        return false;
+                    }else{
+                        return true;
+                    }
+                })
             ])
             ->headerActions([
                 CreateAction::make('add_position')
