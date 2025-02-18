@@ -34,7 +34,7 @@
                         <td class="py-2 px-4 border-b border-gray-200">{{ $item->registration->event->name }}</td>
                         <td class="py-2 px-4 border-b border-gray-200">{{ $item->registration->event->type }}</td>
                         <td class="py-2 px-4 border-b border-gray-200 uppercase">{{ $item->registration->user->member->fullName }}</td>
-                        <td class="py-2 px-4 border-b border-gray-200">{{ Carbon\Carbon::parse($transaction->created_at)->format('F d, Y') }}</td>
+                        <td class="py-2 px-4 border-b border-gray-200">{{ Carbon\Carbon::parse($item->created_at)->format('F d, Y') }}</td>
                     </tr>
                 @empty
                 <tr class="">
