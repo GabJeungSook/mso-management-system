@@ -21,7 +21,9 @@ class AttendanceReport extends Component
         $this->selected = $this->event?->id;
         if($this->event)
         {
-        $this->attendances = Attendance::where('event_id', $this->event->id)->get();
+        $this->attendances = Attendance::whereHas('registration', function ($query) {
+            $query->where('event_id', $this->selected);
+        })->get();
         }else{
             $this->attendances = Attendance::all();
         }
@@ -31,7 +33,9 @@ class AttendanceReport extends Component
     {
         $this->event = Event::find($this->selected);
 
-        $this->attendances = Attendance::where('event_id', $this->event->id)->get();
+        $this->attendances = Attendance::whereHas('registration', function ($query) {
+            $query->where('event_id', $this->event->id);
+        })->get();
     }
 
 
