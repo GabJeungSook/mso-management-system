@@ -16,6 +16,7 @@ use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\EditAction;
 use App\Services\TeamSSProgramSmsService;
+use Carbon\Carbon;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -39,7 +40,7 @@ class Events extends Component implements HasForms, HasTable
                 TextColumn::make('type')->searchable()->label('TYPE'),
                 TextColumn::make('name')->label('NAME'),
                 TextColumn::make('event_date')->date()->label('EVENT DATE'),
-                TextColumn::make('event_time')->time()->label('EVENT TIME'),
+                TextColumn::make('event_time')->time('g:i A')->label('EVENT TIME'),
                 ToggleColumn::make('is_active')->label('STATUS')
                 ->disabled(fn (Event $record) => $record->has_ended)
                 ->beforeStateUpdated(function ($record, $state) {
@@ -108,15 +109,15 @@ class Events extends Component implements HasForms, HasTable
                     $record->has_ended = true;
                     $record->is_active = false;
                     $record->save();
-                    
-                  
+
+
                     $fee = Fee::where('event_id', $record->id)->first();
-                    
+
                     if($fee != null && $fee->has_penalty_fee === 1)
                     {
                         //add penalties
                         $members = Member::whereDoesntHave('officer')->whereHas('user', function ($query) use ($record){
-                            $event = $record;    
+                            $event = $record;
                             $query->whereDoesntHave('registrations.attendances', function ($subQuery) use ($event) {
                                 $subQuery->where('event_id', $event->id);
                             });
@@ -155,9 +156,9 @@ class Events extends Component implements HasForms, HasTable
                                 ->send();
                             return;
                         }
-    
+
                         $response = $smsService->sendBulkSms($phoneNumbers, $message);
-    
+
                         if (isset($response['error']) && $response['error']) {
                             Notification::make()
                                 ->title('SMS Failed')
@@ -203,7 +204,52 @@ class Events extends Component implements HasForms, HasTable
                         ->default(Date::now()->format('Y-m-d')),
                     TimePicker::make('event_time')
                     ->seconds(false)
-                ])
+                ])->after(function (array $data) {
+                    $smsService = new TeamSSProgramSmsService();
+                    $date = Carbon::parse($data['event_date'])->format('F j, Y');
+                    $time = Carbon::parse($data['event_time'])->format('g:i A');
+                    $message = 'MSO MANAGEMENT SYSTEM SMS\nEVENT ANNOUNCEMENT\nName: '.$data['name'].'\nType: '.$data['type'].'\nEvent Date: '.$date.'\nEvent Time: '.$time;
+
+                    $members = Member::whereDoesntHave('officer')->get();
+
+                    if ($members->isEmpty()) {
+                        Notification::make()
+                            ->title('No Recipients')
+                            ->danger()
+                            ->body('No members found')
+                            ->send();
+                        return;
+                    }
+
+                    $phoneNumbers = $members->map(function ($user) {
+                        return $user->phone_number;
+                    })->filter()->toArray();
+
+                    if (empty($phoneNumbers)) {
+                        Notification::make()
+                            ->title('No Recipients')
+                            ->danger()
+                            ->body('No valid phone numbers found in the members.')
+                            ->send();
+                        return;
+                    }
+
+                    $response = $smsService->sendBulkSms($phoneNumbers, $message);
+
+                    if (isset($response['error']) && $response['error']) {
+                        Notification::make()
+                            ->title('SMS Failed')
+                            ->danger()
+                            ->body('Failed to send SMS: ' . $response['message'])
+                            ->send();
+                    } else {
+                        Notification::make()
+                            ->title('Success')
+                            ->success()
+                            ->body('Announcement was sent to users')
+                            ->send();
+                    }
+                })
             ])
             ->bulkActions([
                 // ...

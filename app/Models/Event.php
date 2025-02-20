@@ -8,6 +8,11 @@ class Event extends Model
 {
     protected $guarded = [];
 
+    protected $casts = [
+        'boolean' => 'is_active',
+        'boolean' => 'has_ended'
+    ];
+
     public function fee()
     {
         return $this->hasOne(Fee::class);

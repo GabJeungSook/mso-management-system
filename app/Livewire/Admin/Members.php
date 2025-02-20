@@ -42,7 +42,7 @@ class Members extends Component implements HasForms, HasTable
                 TextColumn::make('address')->wrap()->label('ADDRESS'),
                 TextColumn::make('phone_number')->label('PHONE NUMBER'),
                 TextColumn::make('birth_date')->date()->label('BIRTH DATE'),
-                TextColumn::make('course')->label('COURSE'),
+                TextColumn::make('course.name')->label('COURSE'),
                 TextColumn::make('year')->label('YEAR'),
             ])
             ->filters([
@@ -61,7 +61,7 @@ class Members extends Component implements HasForms, HasTable
                         'address' => $record->address,
                         'phone_number' => $record->phone_number,
                         'birth_date' => $record->birth_date,
-                        'course' => $record->course,
+                        'course_id' => $record->course_id,
                         'year' => $record->year,
                     ];
                 })
@@ -83,12 +83,18 @@ class Members extends Component implements HasForms, HasTable
                     TextInput::make('phone_number')
                         ->required()
                         ->maxLength(255),
-                        TextInput::make('course')
+                    Select::make('course_id')
                         ->required()
-                        ->maxLength(255),
-                        TextInput::make('year')
+                        ->relationship('course', 'name'),
+                    Select::make('year')
                         ->required()
-                        ->maxLength(255),
+                        ->options([
+                            '1st Year' => '1st Year',
+                            '2nd Year' => '2nd Year',
+                            '3rd Year' => '3rd Year',
+                            '4th Year' => '4th Year',
+                            '5th Year' => '5th Year',
+                        ]),
                     DatePicker::make('birth_date')
                         ->label('Birthday')
                         ->required()
@@ -176,12 +182,18 @@ class Members extends Component implements HasForms, HasTable
                             TextInput::make('phone_number')
                             ->required()
                             ->maxLength(255),
-                            TextInput::make('course')
+                            Select::make('course_id')
                             ->required()
-                            ->maxLength(255),
-                            TextInput::make('year')
-                            ->required()
-                            ->maxLength(255),
+                            ->relationship('course', 'name'),
+                            Select::make('year')
+                                ->required()
+                                ->options([
+                                    '1st Year' => '1st Year',
+                                    '2nd Year' => '2nd Year',
+                                    '3rd Year' => '3rd Year',
+                                    '4th Year' => '4th Year',
+                                    '5th Year' => '5th Year',
+                                ]),
                         ]),
                         Textarea::make('address')
                         ->required(),
@@ -230,7 +242,7 @@ class Members extends Component implements HasForms, HasTable
                         'address' => $data['address'],
                         'phone_number' => $data['phone_number'],
                         'birth_date' => $data['birth_date'],
-                        'course' => $data['course'],
+                        'course_id' => $data['course_id'],
                         'year' => $data['year'],
                     ]);
 

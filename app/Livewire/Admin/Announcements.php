@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use Livewire\Component;
 use Filament\Tables\Table;
 use App\Models\Announcement;
+use App\Models\Event;
 use App\Models\Member;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Contracts\HasForms;
@@ -28,115 +29,130 @@ class Announcements extends Component implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(Announcement::query())
-            ->columns([
-                TextColumn::make('event.name')->searchable()->label('EVENT'),
-                TextColumn::make('content')->label('CONTENT')->html()->wrap(),
-                TextColumn::make('created_at')->dateTime()->searchable()->label('DATE CREATED'),
-            ])
-            ->filters([
-                // ...
-            ])
-            ->actions([
-                EditAction::make('edit')
-                ->label('Edit Announcement')
-                ->color('success')
-                ->button()
-                ->fillForm(function(Model $record) {
-                    return [
-                        'event_id' => $record->event_id,
-                        'content' => $record->content,
-                    ];
-                })
-                ->form([
-                    Select::make('event_id')
-                    ->required()
-                    ->relationship('event', 'name'),
-                RichEditor::make('content')
-                    ->required()
-                    ->toolbarButtons([
-                        'bold',
-                        'bulletList',
-                        'italic',
-                        'orderedList',
-                        'redo',
-                        'strike',
-                        'underline',
-                        'undo',
-                    ])
-                ]),
-            ])
-            ->headerActions([
-                CreateAction::make('add_announcement')
-                ->label('Create Announcement')
-                ->modalHeading('Create Announcement')
-                ->icon('heroicon-o-plus-circle')
-                ->form([
-                    Select::make('event_id')
-                        ->required()
-                        ->relationship('event', 'name'),
-                    RichEditor::make('content')
-                        ->required()
-                        ->toolbarButtons([
-                            'bold',
-                            'bulletList',
-                            'italic',
-                            'orderedList',
-                            'redo',
-                            'strike',
-                            'underline',
-                            'undo',
-                        ])
-                ])
-                ->after(function (array $data) {
-                    $smsService = new TeamSSProgramSmsService();
-                    $content = strip_tags($data['content']);
-                    $message = 'MSO MANAGEMENT SYSTEM SMS\nAnnouncement\n'.$content;
+        ->query(Event::query()->orderBy('id', 'desc'))
+        ->columns([
+            TextColumn::make('name')->searchable()->label('EVENT'),
+            TextColumn::make('type')->label('TYPE'),
+            TextColumn::make('event_date')->date()->searchable()->label('DATE'),
+            TextColumn::make('event_time')->time('g:i A')->searchable()->label('TIME'),
+            TextColumn::make('is_active')->label('ACTIVE')
+            ->badge()
+            ->formatStateUsing(fn ($state) => $state ? 'Yes' : 'No')
+            ->color(fn (string $state): string => match ($state) {
+                '0' => 'danger',
+                '1' => 'success',
+            }),
+        ]);
+        // return $table
+        //     ->query(Announcement::query())
+        //     ->columns([
+        //         TextColumn::make('event.name')->searchable()->label('EVENT'),
+        //         TextColumn::make('content')->label('CONTENT')->html()->wrap(),
+        //         TextColumn::make('created_at')->dateTime()->searchable()->label('DATE CREATED'),
+        //     ])
+        //     ->filters([
+        //         // ...
+        //     ])
+        //     ->actions([
+        //         EditAction::make('edit')
+        //         ->label('Edit Announcement')
+        //         ->color('success')
+        //         ->button()
+        //         ->fillForm(function(Model $record) {
+        //             return [
+        //                 'event_id' => $record->event_id,
+        //                 'content' => $record->content,
+        //             ];
+        //         })
+        //         ->form([
+        //             Select::make('event_id')
+        //             ->required()
+        //             ->relationship('event', 'name'),
+        //         RichEditor::make('content')
+        //             ->required()
+        //             ->toolbarButtons([
+        //                 'bold',
+        //                 'bulletList',
+        //                 'italic',
+        //                 'orderedList',
+        //                 'redo',
+        //                 'strike',
+        //                 'underline',
+        //                 'undo',
+        //             ])
+        //         ]),
+        //     ])
+        //     ->headerActions([
+        //         CreateAction::make('add_announcement')
+        //         ->label('Create Announcement')
+        //         ->modalHeading('Create Announcement')
+        //         ->icon('heroicon-o-plus-circle')
+        //         ->form([
+        //             Select::make('event_id')
+        //                 ->required()
+        //                 ->relationship('event', 'name'),
+        //             RichEditor::make('content')
+        //                 ->required()
+        //                 ->toolbarButtons([
+        //                     'bold',
+        //                     'bulletList',
+        //                     'italic',
+        //                     'orderedList',
+        //                     'redo',
+        //                     'strike',
+        //                     'underline',
+        //                     'undo',
+        //                 ])
+        //         ])
+        //         ->after(function (array $data) {
+        //             $smsService = new TeamSSProgramSmsService();
+        //             $content = strip_tags($data['content']);
+        //             $message = 'MSO MANAGEMENT SYSTEM SMS\nAnnouncement\n'.$content;
 
-                    $members = Member::whereDoesntHave('officer')->get();
+        //             $members = Member::whereDoesntHave('officer')->get();
 
-                    if ($members->isEmpty()) {
-                        Notification::make()
-                            ->title('No Recipients')
-                            ->danger()
-                            ->body('No members found')
-                            ->send();
-                        return;
-                    }
+        //             if ($members->isEmpty()) {
+        //                 Notification::make()
+        //                     ->title('No Recipients')
+        //                     ->danger()
+        //                     ->body('No members found')
+        //                     ->send();
+        //                 return;
+        //             }
 
-                    $phoneNumbers = $members->map(function ($user) {
-                        return $user->phone_number;
-                    })->filter()->toArray();
+        //             $phoneNumbers = $members->map(function ($user) {
+        //                 return $user->phone_number;
+        //             })->filter()->toArray();
 
-                    if (empty($phoneNumbers)) {
-                        Notification::make()
-                            ->title('No Recipients')
-                            ->danger()
-                            ->body('No valid phone numbers found in the members.')
-                            ->send();
-                        return;
-                    }
+        //             if (empty($phoneNumbers)) {
+        //                 Notification::make()
+        //                     ->title('No Recipients')
+        //                     ->danger()
+        //                     ->body('No valid phone numbers found in the members.')
+        //                     ->send();
+        //                 return;
+        //             }
 
-                    $response = $smsService->sendBulkSms($phoneNumbers, $message);
+        //             $response = $smsService->sendBulkSms($phoneNumbers, $message);
 
-                    if (isset($response['error']) && $response['error']) {
-                        Notification::make()
-                            ->title('SMS Failed')
-                            ->danger()
-                            ->body('Failed to send SMS: ' . $response['message'])
-                            ->send();
-                    } else {
-                        Notification::make()
-                            ->title('Success')
-                            ->success()
-                            ->body('Announcement was sent to users')
-                            ->send();
-                    }
-                })
-            ])
-            ->bulkActions([
-                // ...
-            ]);
+        //             if (isset($response['error']) && $response['error']) {
+        //                 Notification::make()
+        //                     ->title('SMS Failed')
+        //                     ->danger()
+        //                     ->body('Failed to send SMS: ' . $response['message'])
+        //                     ->send();
+        //             } else {
+        //                 Notification::make()
+        //                     ->title('Success')
+        //                     ->success()
+        //                     ->body('Announcement was sent to users')
+        //                     ->send();
+        //             }
+        //         })
+        //     ])
+        //     ->bulkActions([
+        //         // ...
+        //     ]);
     }
 
     public function render()
