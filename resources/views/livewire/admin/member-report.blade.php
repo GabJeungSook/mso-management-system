@@ -31,7 +31,7 @@
                         <td class="py-2 px-4 border-b border-gray-200">{{ $item->address }}</td>
                         <td class="py-2 px-4 border-b border-gray-200">{{ $item->phone_number }}</td>
                         <td class="py-2 px-4 border-b border-gray-200">{{ Carbon\Carbon::parse($item->birth_date)->format('F d, Y') }}</td>
-                        <td class="py-2 px-4 border-b border-gray-200">{{ $item->course }}</td>
+                        <td class="py-2 px-4 border-b border-gray-200">{{ $item->course->name }}</td>
                         <td class="py-2 px-4 border-b border-gray-200">{{ $item->year }}</td>
                         {{-- <td class="py-2 px-4 border-b border-gray-200">{{ Carbon\Carbon::parse($transaction->created_at)->format('F d, Y') }}</td> --}}
                     </tr>
