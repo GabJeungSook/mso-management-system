@@ -12,6 +12,7 @@ use App\Livewire\Admin\PenaltyReport;
 use App\Livewire\Admin\MemberReport;
 use App\Livewire\Admin\OfficerReport;
 use App\Livewire\Admin\AttendanceReport;
+use App\Livewire\Admin\Expenses;
 use App\Livewire\Admin\Officers;
 use App\Livewire\Admin\Positions;
 use App\Livewire\Admin\Penalties;
@@ -53,6 +54,7 @@ Route::get('/admin/reports/penalties', PenaltyReport::class)->middleware(['auth'
 Route::get('/admin/reports/members', MemberReport::class)->middleware(['auth', 'verified'])->name('admin.report-members');
 Route::get('/admin/reports/officers', OfficerReport::class)->middleware(['auth', 'verified'])->name('admin.report-officers');
 Route::get('/admin/reports/attendance', AttendanceReport::class)->middleware(['auth', 'verified'])->name('admin.report-attendance');
+Route::get('/admin/expenses', Expenses::class)->middleware(['auth', 'verified'])->name('admin.expenses');
 
 
 

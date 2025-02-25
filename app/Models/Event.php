@@ -32,4 +32,5 @@ class Event extends Model
     {
         return $this->hasMany(Penalty::class);
     }
+
 }

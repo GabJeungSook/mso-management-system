@@ -3,19 +3,25 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Fee;
+use Filament\Forms\Get;
 use Livewire\Component;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Model;
+use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Radio;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Textarea;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Get;
 use Filament\Tables\Concerns\InteractsWithTable;
 
 class Fees extends Component implements HasForms, HasTable
@@ -38,10 +44,18 @@ class Fees extends Component implements HasForms, HasTable
                 ->label('PENALTY FEE')
                 ->formatStateUsing(fn ($state) => '₱' . number_format($state, 2))
                 ->searchable(),
-                TextColumn::make('expenses')
+                TextColumn::make('expensesRelation')
                 ->label('EXPENSES')
-                ->formatStateUsing(fn ($state) => '₱' . number_format($state, 2))
+                ->bulleted()
+                ->formatStateUsing(fn ($state) => $state->description. ' - ₱ ' . number_format($state->amount, 2))
                 ->searchable(),
+                TextColumn::make('expenseTotal')
+                ->formatStateUsing(fn ($state) => '₱ ' . number_format($state, 2)),
+                // TextColumn::make('total_amount')->sum([
+                //     'expensesRelation' => fn(Builder $query) => $query->whereNotNull('amount'),
+                // ], 'amount')
+                //     ->default(0)
+                //     ->label('Payments')
             ])
             ->filters([
                 // ...
@@ -58,8 +72,6 @@ class Fees extends Component implements HasForms, HasTable
                     'reg_fee' => $record->reg_fee,
                     'has_penalty_fee' => $record->has_penalty_fee,
                     'penalty_fee' => $record->penalty_fee,
-                    'has_expenses' => $record->has_expenses,
-                    'expenses' => $record->expenses,
                     ];
                 })
                 ->form([
@@ -88,17 +100,33 @@ class Fees extends Component implements HasForms, HasTable
                     ->prefix('₱')
                     ->numeric()
                     ->required()->visible(fn (Get $get) => $get('has_penalty_fee')),
-                Radio::make('has_expenses')
-                    ->label('Does this event have expenses?')
-                    ->boolean()
-                    ->inline()
-                    ->default(false)
-                    ->live(),
-                TextInput::make('expenses')
-                    ->label('Expenses')
-                    ->prefix('₱')
-                    ->numeric()
-                    ->required()->visible(fn (Get $get) => $get('has_expenses')),
+                // Radio::make('has_expenses')
+                //     ->label('Does this event have expenses?')
+                //     ->boolean()
+                //     ->inline()
+                //     ->default(false)
+                //     ->live(),
+                // TextInput::make('expenses')
+                //     ->label('Expenses')
+                //     ->prefix('₱')
+                //     ->numeric()
+                //     ->required()->visible(fn (Get $get) => $get('has_expenses')),
+                ]),
+                EditAction::make('add_expenses')
+                ->label('Add Expenses')
+                ->color('primary')
+                ->button()
+                ->icon('heroicon-o-plus-circle')
+                ->form([
+                    Repeater::make('expensesRelation')
+                    ->relationship('expenses')
+                    ->schema([
+                        Textarea::make('description')->required(),
+                        TextInput::make('amount')
+                        ->prefix('₱')
+                        ->numeric()
+                        ->required(),
+                    ])
                 ]),
             ])
             ->headerActions([
@@ -132,21 +160,21 @@ class Fees extends Component implements HasForms, HasTable
                         ->prefix('₱')
                         ->numeric()
                         ->required()->visible(fn (Get $get) => $get('has_penalty_fee')),
-                    Radio::make('has_expenses')
-                        ->label('Does this event have expenses?')
-                        ->boolean()
-                        ->inline()
-                        ->default(false)
-                        ->live(),
-                    TextInput::make('expenses')
-                        ->label('Expenses')
-                        ->prefix('₱')
-                        ->numeric()
-                        ->required()->visible(fn (Get $get) => $get('has_expenses')),
-                    // DatePicker::make('event_date')
-                    //     ->required()
-                    //     ->native(false)
-                    //     ->default(Date::now()->format('Y-m-d')),
+                    // Radio::make('has_expenses')
+                    //     ->label('Does this event have expenses?')
+                    //     ->boolean()
+                    //     ->inline()
+                    //     ->default(false)
+                    //     ->live(),
+                    //     TextInput::make('expenses')
+                    //     ->label('Expenses')
+                    //     ->prefix('₱')
+                    //     ->numeric()
+                    //     ->required()->visible(fn (Get $get) => $get('has_expenses')),
+                        // DatePicker::make('event_date')
+                        //     ->required()
+                        //     ->native(false)
+                        //     ->default(Date::now()->format('Y-m-d')),
                 ])
             ])
             ->bulkActions([
