@@ -8,6 +8,7 @@ use Livewire\Component;
 use Filament\Tables\Table;
 use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Radio;
+use Illuminate\Support\Facades\Auth;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Contracts\HasForms;
@@ -18,9 +19,9 @@ use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Actions\CreateAction;
+use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 
@@ -50,6 +51,7 @@ class Fees extends Component implements HasForms, HasTable
                 ->formatStateUsing(fn ($state) => $state->description. ' - ₱ ' . number_format($state->amount, 2))
                 ->searchable(),
                 TextColumn::make('expenseTotal')
+                ->label('TOTAL EXPENSES')
                 ->formatStateUsing(fn ($state) => '₱ ' . number_format($state, 2)),
                 // TextColumn::make('total_amount')->sum([
                 //     'expensesRelation' => fn(Builder $query) => $query->whereNotNull('amount'),
@@ -127,7 +129,7 @@ class Fees extends Component implements HasForms, HasTable
                         ->numeric()
                         ->required(),
                     ])
-                ]),
+                ])->visible(fn () => Auth::user()->role === 'admin'),
             ])
             ->headerActions([
                 CreateAction::make('add_fee')

@@ -24,8 +24,8 @@ class Attendance extends Component implements HasForms, HasTable
                 TextColumn::make('registration.event.name')->label('EVENT NAME'),
                 TextColumn::make('registration.event.type')->label('EVENT TYPE'),
                 TextColumn::make('registration.user.member.fullName')->label('MEMBER NAME'),
-                TextColumn::make('created_at')->datetime()->label('DATE ATTENDED'),
-
+                TextColumn::make('created_at')->date('F d, Y')->label('DATE ATTENDED'),
+                TextColumn::make('created_at')->time('g:i A')->label('TIME ATTENDED'),
                 // TextColumn::make('number_of_members')->label('NUMBER OF MEMBERS'),
             ])
             ->filters([

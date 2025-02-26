@@ -207,6 +207,12 @@
                         <span class="truncate">Attendance Report</span>
                       </a>
                     </li>
+                    <li>
+                        <a wire:navigate href="{{ route('admin.report-expenses') }}" class="{{ request()->routeIs('admin.report-expenses') ? 'group flex gap-x-3 rounded-md bg-yellow-700 p-2 text-sm/6 font-semibold text-white' : 'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-50 hover:bg-yellow-700 hover:text-white' }}">
+                          <span class="flex size-6 shrink-0 items-center justify-center rounded-lg border border-yellow-400 bg-yellow-500 text-[0.625rem] font-medium text-white">E</span>
+                          <span class="truncate">Expense Report</span>
+                        </a>
+                      </li>
                     {{-- <li>
                       <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-indigo-200 hover:bg-indigo-700 hover:text-white">
                         <span class="flex size-6 shrink-0 items-center justify-center rounded-lg border border-indigo-400 bg-indigo-500 text-[0.625rem] font-medium text-white">H</span>
@@ -602,6 +608,12 @@
                     <span class="truncate">Attendance Report</span>
                   </a>
                 </li>
+                <li>
+                    <a wire:navigate href="{{ route('admin.report-expenses') }}" class="{{ request()->routeIs('admin.report-expenses') ? 'group flex gap-x-3 rounded-md bg-yellow-700 p-2 text-sm/6 font-semibold text-white' : 'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-50 hover:bg-yellow-700 hover:text-white' }}">
+                      <span class="flex size-6 shrink-0 items-center justify-center rounded-lg border border-yellow-400 bg-yellow-500 text-[0.625rem] font-medium text-white">E</span>
+                      <span class="truncate">Expense Report</span>
+                    </a>
+                  </li>
                 {{-- <li>
                   <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-indigo-200 hover:bg-indigo-700 hover:text-white">
                     <span class="flex size-6 shrink-0 items-center justify-center rounded-lg border border-indigo-400 bg-indigo-500 text-[0.625rem] font-medium text-white">T</span>
